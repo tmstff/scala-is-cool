@@ -1,6 +1,7 @@
-import org.scalatest._
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class ComplexNumberSpec extends FlatSpec with Matchers {
+class ComplexNumberSpec extends AnyFlatSpec with Matchers {
 
   "A complex number" should "be writable in terms like 'a + b*I'" in {
 

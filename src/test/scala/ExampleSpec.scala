@@ -1,15 +1,16 @@
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
+
 import java.util.concurrent.TimeUnit
-
-import collection.mutable.Stack
-import org.scalatest._
-
-import scala.concurrent.Await._
-import scala.concurrent.Future
-
+import scala.collection.mutable.Stack
+import scala.concurrent.Await.*
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 import scala.concurrent.duration.Duration
+import scala.deriving.Mirror
+import scala.deriving.Mirror.SingletonProxy
 
-class ExampleSpec extends FlatSpec with Matchers {
+class ExampleSpec extends AnyFlatSpec with Matchers {
 
   val user = User(
     name = "Tim",
@@ -36,7 +37,7 @@ class ExampleSpec extends FlatSpec with Matchers {
     (user == user.copy()) should be (true) // same as .equals!
     (user.hashCode() == user.copy().hashCode()) should be (true)
 
-    User.unapply(
+    Tuple.fromProductTyped(
       User.apply(name = "Tim", orders = Nil)) should be (("Tim", Nil))
   }
 
@@ -116,14 +117,14 @@ class ExampleSpec extends FlatSpec with Matchers {
   }
 
   "Tuples" should "be handy" in {
-    val (name, orders) = toTuple
+    val (name, orders) = toTuple(user)
 
     name should be ("Tim")
     orders(0).id should be (1)
   }
 
-  def toTuple: (String, List[Order]) = {
-    User.unapply(user).get
+  def toTuple(user: User): (String, List[Order]) = {
+    Tuple.fromProductTyped(user)
   }
 
   it should "throw NoSuchElementException if an empty stack is popped" in {
